@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="annotation\Products" table="products">
+    <indexes>
+      <index name="category_id" columns="category_id"/>
+      <index name="measuring_sys_id" columns="measuring_sys_id"/>
+      <index name="user_id" columns="user_id"/>
+      <index name="warehouse_id" columns="warehouse_id"/>
+    </indexes>
+    <id name="productId" type="integer" column="product_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="255" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="barcode" type="string" column="barcode" length="255" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="categoryId" type="integer" column="category_id" nullable="false">
+      <options>
+        <option name="unsigned">1</option>
+        <option name="comment">к какой категории относится</option>
+      </options>
+    </field>
+    <field name="warehouseId" type="integer" column="warehouse_id" nullable="false">
+      <options>
+        <option name="unsigned">1</option>
+        <option name="comment">к какому складу принадлежит</option>
+      </options>
+    </field>
+    <field name="quantity" type="integer" column="quantity" nullable="false">
+      <options>
+        <option name="unsigned">1</option>
+        <option name="comment">количество</option>
+      </options>
+    </field>
+    <many-to-one field="user" target-entity="Users" fetch="LAZY">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="user_id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="measuringSys" target-entity="MeasuringSystems" fetch="LAZY">
+      <join-columns>
+        <join-column name="measuring_sys_id" referenced-column-name="measuring_sys_id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="category" target-entity="Categories" inversed-by="product" fetch="LAZY">
+      <join-table name="categories_products">
+        <join-columns>
+          <join-column name="product_id" referenced-column-name="product_id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="category_id" referenced-column-name="category_id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="warehouse" target-entity="Warehouses" inversed-by="product" fetch="LAZY">
+      <join-table name="warehouses_products">
+        <join-columns>
+          <join-column name="product_id" referenced-column-name="product_id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="warehouse_id" referenced-column-name="warehouse_id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

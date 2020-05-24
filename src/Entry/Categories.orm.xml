@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="annotation\Categories" table="categories">
+    <indexes>
+      <index name="ind_in_cat" columns="user_id"/>
+    </indexes>
+    <id name="categoryId" type="integer" column="category_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="64" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">имя</option>
+      </options>
+    </field>
+    <field name="storageConditions" type="string" column="storage_conditions" length="255" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">условия хранения</option>
+      </options>
+    </field>
+    <many-to-one field="user" target-entity="Users" fetch="LAZY">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="user_id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="product" target-entity="Products" mapped-by="category" fetch="LAZY"/>
+  </entity>
+</doctrine-mapping>
